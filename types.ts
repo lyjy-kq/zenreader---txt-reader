@@ -19,3 +19,10 @@ export enum ReaderTheme {
   DARK = 'dark',
   eyeProtection = 'green',
 }
+
+export interface ReaderSettings {
+  scrollAmount: number; // pixels per scroll action
+  fontSize: number;
+  lineHeight: number;
+  theme: ReaderTheme;
+}

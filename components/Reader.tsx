@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Book } from '../types';
 import { Catalog } from './Catalog';
+import { SettingsPanel } from './SettingsPanel';
+import { getSettings, saveSettings } from '../services/settings';
 import { 
   BookIcon, UserIcon, SettingIcon, MoonIcon, ChevronRight, ListIcon 
 } from './Icons';
@@ -21,11 +23,70 @@ export const Reader: React.FC<ReaderProps> = ({
   const chapter = book.chapters[currentChapterIndex];
   const topRef = useRef<HTMLDivElement>(null);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [scrollAmount, setScrollAmount] = useState(() => getSettings().scrollAmount);
 
   // Scroll to top when chapter changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [currentChapterIndex]);
+
+  // Keyboard shortcuts handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input field
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+      
+      switch(e.key.toLowerCase()) {
+        // Scroll up: W, ArrowUp
+        case 'w':
+        case 'arrowup':
+          e.preventDefault();
+          window.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+          break;
+        
+        // Scroll down: S, ArrowDown, Space
+        case 's':
+        case 'arrowdown':
+          e.preventDefault();
+          window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+          break;
+        
+        case ' ':
+          e.preventDefault();
+          window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+          break;
+        
+        // Previous chapter: A, ArrowLeft
+        case 'a':
+        case 'arrowleft':
+          e.preventDefault();
+          if (currentChapterIndex > 0) {
+            onChapterChange(currentChapterIndex - 1);
+          }
+          break;
+        
+        // Next chapter: D, ArrowRight
+        case 'd':
+        case 'arrowright':
+          e.preventDefault();
+          if (currentChapterIndex < book.chapters.length - 1) {
+            onChapterChange(currentChapterIndex + 1);
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentChapterIndex, book.chapters.length, onChapterChange, scrollAmount]);
+
+  const handleScrollAmountChange = (amount: number) => {
+    setScrollAmount(amount);
+    saveSettings({ scrollAmount: amount });
+  };
 
   const goToNext = () => {
     if (currentChapterIndex < book.chapters.length - 1) {
@@ -63,6 +124,14 @@ export const Reader: React.FC<ReaderProps> = ({
         isOpen={isCatalogOpen} 
         onClose={() => setIsCatalogOpen(false)} 
         onSelectChapter={onChapterChange}
+      />
+
+      {/* Settings Panel */}
+      <SettingsPanel
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        scrollAmount={scrollAmount}
+        onScrollAmountChange={handleScrollAmountChange}
       />
 
       {/* --- Top Navbar --- */}
@@ -164,18 +233,30 @@ export const Reader: React.FC<ReaderProps> = ({
             />
           </div>
 
+          {/* Keyboard shortcuts hint */}
+          <div className="mt-8 text-center text-xs text-qidian-lightGray">
+            快捷键：<kbd className="px-2 py-1 bg-qidian-hover rounded mx-1">W/↑</kbd> 向上 
+            <kbd className="px-2 py-1 bg-qidian-hover rounded mx-1">S/↓/空格</kbd> 向下 
+            <kbd className="px-2 py-1 bg-qidian-hover rounded mx-1">A/←</kbd> 上一章 
+            <kbd className="px-2 py-1 bg-qidian-hover rounded mx-1">D/→</kbd> 下一章
+          </div>
+
         </div>
 
         {/* --- Right Sidebar (Fixed) --- */}
         <div className="hidden xl:flex fixed right-[calc(50%-560px)] bottom-[100px] flex-col gap-3 z-10">
           <RightFloatingButton 
             icon={<ListIcon />} 
-            label="Catalog" 
+            label="目录" 
             onClick={() => setIsCatalogOpen(true)} 
           />
-          <RightFloatingButton icon={<BookIcon />} label="Details" onClick={() => {}} />
-          <RightFloatingButton icon={<SettingIcon />} label="Settings" onClick={() => {}} />
-          <RightFloatingButton icon={<MoonIcon />} label="Night" onClick={() => {}} />
+          <RightFloatingButton 
+            icon={<SettingIcon />} 
+            label="设置" 
+            onClick={() => setIsSettingsOpen(true)} 
+          />
+          <RightFloatingButton icon={<BookIcon />} label="详情" onClick={() => {}} />
+          <RightFloatingButton icon={<MoonIcon />} label="夜间" onClick={() => {}} />
         </div>
 
       </div>
