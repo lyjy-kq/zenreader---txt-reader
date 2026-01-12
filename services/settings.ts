@@ -7,6 +7,7 @@ const defaultSettings: ReaderSettings = {
   fontSize: 20,
   lineHeight: 1.8,
   theme: 'beige' as const,
+  nightMode: false,
 };
 
 export const getSettings = (): ReaderSettings => {
@@ -33,4 +34,11 @@ export const saveSettings = (settings: Partial<ReaderSettings>): void => {
 
 export const updateScrollAmount = (amount: number): void => {
   saveSettings({ scrollAmount: amount });
+};
+
+export const toggleNightMode = (): boolean => {
+  const current = getSettings();
+  const newNightMode = !current.nightMode;
+  saveSettings({ nightMode: newNightMode });
+  return newNightMode;
 };

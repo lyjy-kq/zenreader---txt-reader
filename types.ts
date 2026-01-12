@@ -25,4 +25,5 @@ export interface ReaderSettings {
   fontSize: number;
   lineHeight: number;
   theme: ReaderTheme;
+  nightMode: boolean;
 }
