@@ -105,11 +105,11 @@ export const Reader: React.FC<ReaderProps> = ({
       <div className="flex justify-center w-full relative">
         
         {/* --- Left Sidebar (Fixed) --- */}
-        <div className="hidden xl:flex fixed left-[calc(50%-580px)] top-[100px] flex-col gap-2 z-10">
-          <SidebarButton label="Report" />
-          <SidebarButton label="Guide" />
-          <SidebarButton label="Feedback" />
-        </div>
+        {/*<div className="hidden xl:flex fixed left-[calc(50%-580px)] top-[100px] flex-col gap-2 z-10">*/}
+        {/*  <SidebarButton label="Report" />*/}
+        {/*  <SidebarButton label="Guide" />*/}
+        {/*  <SidebarButton label="Feedback" />*/}
+        {/*</div>*/}
 
         {/* --- Center Content --- */}
         <div ref={topRef} className="w-full max-w-[900px] bg-qidian-panel min-h-screen shadow-panel px-8 py-12 sm:px-16 sm:py-16 mt-4 mb-20">
