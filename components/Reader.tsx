@@ -248,22 +248,22 @@ export const Reader: React.FC<ReaderProps> = ({
 
           {/* Chapter Body */}
           <article className={`font-serif text-[20px] ${
-            nightMode ? 'text-gray-300' : 'text-qidian-text'
+            nightMode ? 'text-gray-100' : 'text-qidian-text'
           }`}>
              {renderContent(chapter.content)}
           </article>
 
-          {/* Chapter Footer / Author Note Placeholder */}
-          <div className={`mt-16 p-6 rounded-lg text-sm border transition-colors duration-300 ${
-            nightMode
-              ? 'bg-[#2a2a2a] text-gray-400 border-[#3a3a3a]'
-              : 'bg-[#eef1f3]/50 text-qidian-gray border-qidian-border/50'
-          }`}>
-             <p className={`font-bold mb-2 ${
-               nightMode ? 'text-[#ff6b6b]' : 'text-qidian-red'
-             }`}>Author's Note</p>
-             <p>This is a generated preview of the parsed content. Support original authors if applicable.</p>
-          </div>
+          {/*/!* Chapter Footer / Author Note Placeholder *!/*/}
+          {/*<div className={`mt-16 p-6 rounded-lg text-sm border transition-colors duration-300 ${*/}
+          {/*  nightMode*/}
+          {/*    ? 'bg-[#2a2a2a] text-gray-400 border-[#3a3a3a]'*/}
+          {/*    : 'bg-[#eef1f3]/50 text-qidian-gray border-qidian-border/50'*/}
+          {/*}`}>*/}
+          {/*   <p className={`font-bold mb-2 ${*/}
+          {/*     nightMode ? 'text-[#ff6b6b]' : 'text-qidian-red'*/}
+          {/*   }`}>Author's Note</p>*/}
+          {/*   <p>This is a generated preview of the parsed content. Support original authors if applicable.</p>*/}
+          {/*</div>*/}
 
           {/* Bottom Navigation Buttons */}
           <div className="mt-12 flex justify-between items-center select-none">
